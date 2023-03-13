@@ -5,6 +5,7 @@ import ui from "./config/ui.config";
 
 import {validate} from "./helpers/validate";
 import {showInputError, hideInputError} from "./views/form";
+import {login} from './services/auth.service'
 
 
 const { form, inputMail, inputPassword } = ui;
@@ -25,7 +26,7 @@ inputs.forEach((el) =>
 })
 
 //hendlers
-function onSubmit()
+async function onSubmit()
 {
 	const isValidForm = inputs.every((el) =>
 	{
@@ -35,6 +36,14 @@ function onSubmit()
 		}
 		return validate(el);
 	});
+	if(!isValidForm)return;
+	try
+	{
+		await login(inputEmail.value, inputPassword.value)
+	}
+	catch (err)
+	{
 	
+	}
 }
 
