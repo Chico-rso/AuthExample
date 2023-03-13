@@ -1,5 +1,3 @@
-import {msg} from "@babel/core/lib/config/validation/option-assertions";
-
 /**
  *Function inputErrorTemplate. Add template for input error
  * @param {String} msg
