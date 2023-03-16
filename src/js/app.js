@@ -1,49 +1,46 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "../css/style.css";
 
-import ui from "./config/ui.config";
-
+import UI from "./config/ui.config";
 import {validate} from "./helpers/validate";
-import {showInputError, hideInputError} from "./views/form";
-import {login} from './services/auth.service'
+import {showInputError, removeInputError} from "./views/form";
+import {login} from "./services/auth.service";
+import {notify} from "./views/notifications";
 
+const {form, inputEmail, inputPassword} = UI;
+const inputs = [inputEmail, inputPassword];
 
-const { form, inputMail, inputPassword } = ui;
-const inputs = [inputMail, inputPassword];
-
-//events
-form.addEventListener('submit', (e) =>{
+// Events
+form.addEventListener("submit", e =>
+{
 	e.preventDefault();
 	onSubmit();
 });
+inputs.forEach(el => el.addEventListener("focus", () => removeInputError(el)));
 
-inputs.forEach((el) =>
-{
-	el.addEventListener('focus', () =>
-	{
-		hideInputError(el);
-	})
-})
-
-//hendlers
+// Handlers
 async function onSubmit()
 {
-	const isValidForm = inputs.every((el) =>
+	const isValidForm = inputs.every(el =>
 	{
-		if(!isValidForm)
+		const isValidInput = validate(el);
+		if (!isValidInput)
 		{
-			showInputError(el)
+			showInputError(el);
 		}
-		return validate(el);
+		return isValidInput;
 	});
-	if(!isValidForm)return;
+	
+	if (!isValidForm) return;
+	
 	try
 	{
-		await login(inputEmail.value, inputPassword.value)
+		await login(inputEmail.value, inputPassword.value);
+		form.reset();
+		notify({msg: "Login success", className: "alert-success"});
 	}
 	catch (err)
 	{
-	
+		notify({mas: "Login faild", className: "alert-danger"});
 	}
 }
-

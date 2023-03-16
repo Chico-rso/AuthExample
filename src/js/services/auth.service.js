@@ -12,7 +12,7 @@ export async function login(email, password)
 	try{
 		const response = await axios.post(`${API_ENV.apiUrl}/auth/login`, JSON.stringify({email, password}),{
 			headers: {
-				"content-type": "aplicatoion/json"
+				"content-type": "application/json"
 			}
 		})
 		console.log(response);
